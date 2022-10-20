@@ -7,7 +7,7 @@ import chisel3.experimental.BundleLiterals._
 
 class MEMORYSpec extends AnyFreeSpec with ChiselScalatestTester {
     "Memory should be correct" in {
-        test(new memory) { c =>
+        test(new memory).withAnnotations(Seq(WriteVcdAnnotation)) { c =>
             // verify that the output of memory is correct
             c.io.wrAddr.poke(10.U)
             c.io.wrEna.poke(1)
@@ -16,7 +16,7 @@ class MEMORYSpec extends AnyFreeSpec with ChiselScalatestTester {
 
             c.io.rdAddr.poke(10.U)
             c.clock.step(1)
-            c.io.rdData.expect(0.U)  
+            c.io.rdData.expect(66.U)  
             
         }
     }

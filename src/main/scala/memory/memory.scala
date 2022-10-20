@@ -15,5 +15,5 @@ class memory() extends Module {
     when(io.wrEna) {
         mem.write(io.wrAddr , io.wrData)
     }
-    io.rdData := 0.U
+    //io.rdData := 0.U
 }
