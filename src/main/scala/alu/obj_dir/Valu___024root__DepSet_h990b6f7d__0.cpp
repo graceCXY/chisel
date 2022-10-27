@@ -6,16 +6,7 @@
 
 #include "Valu___024root.h"
 
-VL_INLINE_OPT void Valu___024root___sequent__TOP__0(Valu___024root* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    Valu__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Valu___024root___sequent__TOP__0\n"); );
-    // Body
-    vlSelf->out = (0xffU & ((IData)(vlSelf->op) ? ((IData)(vlSelf->a) 
-                                                   + (IData)(vlSelf->b))
-                             : ((IData)(vlSelf->a) 
-                                - (IData)(vlSelf->b))));
-}
+void Valu___024root___sequent__TOP__0(Valu___024root* vlSelf);
 
 void Valu___024root___eval(Valu___024root* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused

@@ -32,16 +32,41 @@ class fifo(Width:Int, Depth:Int, PointerWidth:Int) extends Module {
     })
 
     val entries = Reg(Vec(Depth, UInt(Width.W)))
-    val wrPtr = Reg(UInt(PointerWidth.W))
+    val wrPtr = RegInit(UInt(PointerWidth.W), 0.U)
+    val rdPtr = RegInit(UInt(PointerWidth.W), 0.U)
+    val nElem = RegInit(UInt(PointerWidth.W), 0.U)
 
-    io.din_ready := wrPtr <= Depth.U
+    io.din_ready := nElem < Depth.U
     when(io.din_valid && io.din_ready) {
-        entries(wrPtr) := io.din
+        // println(nElem)
+        entries(wrPtr) := RegNext(io.din)
+        nElem := nElem + 1.U
         wrPtr := wrPtr + 1.U
+        when(wrPtr === Depth.U) {
+            wrPtr := 0.U
+        }
     }
 
-    io.dout := 0.U
-    io.dout_valid := 0.B
+    io.dout_valid := nElem > 0.U
+    when(io.dout_valid && io.dout_ready) {
+        println("read")
+        io.dout := entries(rdPtr)
+        nElem := nElem - 1.U
+        rdPtr := rdPtr + 1.U 
+        when(rdPtr === Depth.U) {
+            // print("0")
+            rdPtr := 0.U
+        }
+    }.otherwise{
+        io.dout := 0.U
+    }
+    
+}
+
+
+
+
+
 
 /*
     val queue_length = RegInit(0.U)
@@ -85,4 +110,4 @@ class fifo(Width:Int, Depth:Int, PointerWidth:Int) extends Module {
         }
     }
     */
-}
+

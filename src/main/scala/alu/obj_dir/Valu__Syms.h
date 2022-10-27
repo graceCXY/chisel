@@ -26,6 +26,9 @@ class Valu__Syms final : public VerilatedSyms {
     // MODULE INSTANCE STATE
     Valu___024root                 TOP;
 
+    // COVERAGE
+    uint32_t __Vcoverage[3];
+
     // CONSTRUCTORS
     Valu__Syms(VerilatedContext* contextp, const char* namep, Valu* modelp);
     ~Valu__Syms();

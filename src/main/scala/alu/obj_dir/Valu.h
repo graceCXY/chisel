@@ -9,6 +9,7 @@
 #define VERILATED_VALU_H_  // guard
 
 #include "verilated.h"
+#include "verilated_cov.h"
 
 class Valu__Syms;
 class Valu___024root;

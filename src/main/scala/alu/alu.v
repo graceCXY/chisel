@@ -58,7 +58,7 @@ module alu(
     //assign out = a + b;
     //assign out = op ? a + b : a - b; // ternary operator
 endmodule
-/*
+
 module alu_tb();
     reg [7:0] a_tb, b_tb;
     reg op_tb;
@@ -88,7 +88,7 @@ module alu_tb();
         $finish();
     end
 endmodule
-*/
+
 
 //`timescale 1ns/1ps
 /*
