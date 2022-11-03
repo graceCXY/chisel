@@ -1,6 +1,7 @@
 package fifo
 
 import chisel3._ 
+import chisel3.util._
 /*
 class node(Width:Int) extends Module {
     val io = IO(new Bundle{
@@ -17,7 +18,7 @@ class node(Width:Int) extends Module {
 }
 */
 
-class fifo(Width:Int, Depth:Int, PointerWidth:Int) extends Module {
+class fifo(Width:Int, Depth:Int) extends Module {
     val io = IO(new Bundle {
 
         //write side (enqueueing)
@@ -32,35 +33,32 @@ class fifo(Width:Int, Depth:Int, PointerWidth:Int) extends Module {
     })
 
     val entries = Reg(Vec(Depth, UInt(Width.W)))
-    val wrPtr = RegInit(UInt(PointerWidth.W), 0.U)
-    val rdPtr = RegInit(UInt(PointerWidth.W), 0.U)
-    val nElem = RegInit(UInt(PointerWidth.W), 0.U)
+    val wrPtr = RegInit(UInt(log2Ceil(Depth).W), 0.U)
+    val rdPtr = RegInit(UInt(log2Ceil(Depth).W), 0.U)
+    val nElem = RegInit(UInt(log2Ceil(Depth+1).W), 0.U)
 
     io.din_ready := nElem < Depth.U
     when(io.din_valid && io.din_ready) {
         // println(nElem)
-        entries(wrPtr) := RegNext(io.din)
+        entries(wrPtr) := io.din
         nElem := nElem + 1.U
         wrPtr := wrPtr + 1.U
-        when(wrPtr === Depth.U) {
+        when(wrPtr === (Depth-1).U) {
             wrPtr := 0.U
         }
     }
 
     io.dout_valid := nElem > 0.U
+    io.dout := entries(rdPtr)
     when(io.dout_valid && io.dout_ready) {
-        println("read")
-        io.dout := entries(rdPtr)
+        printf("read")
         nElem := nElem - 1.U
         rdPtr := rdPtr + 1.U 
-        when(rdPtr === Depth.U) {
+        when(rdPtr === (Depth-1).U) {
             // print("0")
             rdPtr := 0.U
         }
-    }.otherwise{
-        io.dout := 0.U
     }
-    
 }
 
 

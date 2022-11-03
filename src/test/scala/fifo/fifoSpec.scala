@@ -7,7 +7,7 @@ import chisel3.experimental.BundleLiterals._
 
 class FIFOSpec extends AnyFreeSpec with ChiselScalatestTester {
     "FIFO should be first in first out" in {
-        test(new fifo(8, 2, 4)).withAnnotations(Seq(WriteVcdAnnotation)) { c =>
+        test(new fifo(8, 2)).withAnnotations(Seq(WriteVcdAnnotation)) { c =>
 
             
             //adds 10 to queue, not valid
@@ -25,7 +25,7 @@ class FIFOSpec extends AnyFreeSpec with ChiselScalatestTester {
             c.clock.step(1)
             c.io.din_ready.expect(1.B) // not full so should be ready to take in input
             c.io.dout_valid.expect(1.B) // not empty so should be ready to output
-            c.io.dout.expect(0.U)
+            c.io.dout.expect(6.U)
 
             // takes first value out of queue
             c.io.din.poke(15.U)
@@ -34,7 +34,8 @@ class FIFOSpec extends AnyFreeSpec with ChiselScalatestTester {
             c.clock.step(1)
             c.io.din_ready.expect(1.B) // not full so should be read to take in input
             c.io.dout_valid.expect(0.B) // should be empty so should be ready to output 
-            c.io.dout.expect(0.U) 
+            c.io.dout.expect(0.U)
+            //c.io.dout.expect(6.U) // should be the first value that went in, which is 6
 
             // adds 15 to queue, valid 
             c.io.din.poke(15.U)
